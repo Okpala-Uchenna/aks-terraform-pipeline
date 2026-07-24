@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-demo-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-demo-api
+  template:
+    metadata:
+      labels:
+        app: devops-demo-api
+    spec:
+      containers:
+        - name: devops-demo-api
+          image: devopsdemoacr001.azurecr.io/devops-demo-api:latest
+          ports:
+            - containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
